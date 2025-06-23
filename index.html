@@ -11,18 +11,19 @@
       <form id="auth-form">
         <input type="email" id="email" placeholder="Email" required />
         <input type="password" id="password" placeholder="Password" required />
-
         <button type="submit" id="submit-btn">Login</button>
-        <div id="loader" style="display: none; margin-top: 10px">
-          ⏳ Loading...
-        </div>
+        <div id="loader" class="loader" style="display: none"></div>
       </form>
+
       <p id="toggle-msg">
         Don't have an account?
         <a href="#" id="toggle-link" onclick="toggleForm()">Register</a>
       </p>
-      <p id="auth-error" style="color: red"></p>
+      <p id="auth-error" class="error-text"></p>
     </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
 
     <script src="/auth.js"></script>
   </body>

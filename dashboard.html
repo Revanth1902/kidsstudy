@@ -213,13 +213,27 @@
         background-color: #ccc;
         cursor: not-allowed;
       }
+      .avatar-thumb {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #ffd700; /* optional gold border for visual appeal */
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <header>
         <div class="user-info">
-          <img src="" alt="avatar" id="dashAvatar" class="avatar-thumb" />
+          <img
+            src=""
+            alt="avatar"
+            id="dashAvatar"
+            class="avatar-thumb"
+            style=""
+          />
           <h1>HOME</h1>
           <div class="stars">⭐ <span id="starCount">0</span></div>
         </div>
@@ -260,14 +274,21 @@
     </div>
 
     <script>
+      const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
       const dashAvatar = document.getElementById("dashAvatar");
-      document.cookie = `token=${token}; path=/; max-age=${7 * 24 * 60 * 60}`;
-      document.cookie = `user=${encodeURIComponent(
-        JSON.stringify(user)
-      )}; path=/; max-age=${7 * 24 * 60 * 60}`;
+      const starCount = document.getElementById("starCount");
+
+      if (!user || !user.name) {
+        // If no user info, redirect to login
+        window.location.href = "index.html";
+      }
+
       dashAvatar.src =
         user.avatarUrl ||
         "https://www.gstatic.com/flutter-onestack-prototype/genui/example_1.jpg";
+      document.querySelector("header h1").textContent = `Hello, ${user.name}`;
+      starCount.innerText = localStorage.getItem("stars") || 0;
+
       starCount.innerText = localStorage.getItem("stars") || 0;
 
       let stars = Number(localStorage.getItem("stars") || 0);

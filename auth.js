@@ -36,7 +36,6 @@ document.getElementById("auth-form").addEventListener("submit", async (e) => {
     return;
   }
 
-  // Disable button and show loader
   submitBtn.style.display = "none";
   loader.style.display = "block";
   errorBox.innerText = "";
@@ -55,7 +54,7 @@ document.getElementById("auth-form").addEventListener("submit", async (e) => {
     const data = await response.json();
 
     if (!response.ok) {
-      errorBox.innerText = data.message || "Something went wrong!";
+      showToast(data.message || "Something went wrong!", true);
       submitBtn.style.display = "block";
       loader.style.display = "none";
       return;
@@ -63,17 +62,29 @@ document.getElementById("auth-form").addEventListener("submit", async (e) => {
 
     if (isLogin) {
       localStorage.setItem("authToken", data.token);
-      window.location.href = "dashboard.html";
+      localStorage.setItem("userInfo", JSON.stringify(data.user || data));
+      showToast("Login successful!");
+      setTimeout(() => (window.location.href = "dashboard.html"), 1000);
     } else {
-      alert("Registration successful! Now please login.");
+      showToast("Registered successfully! Now login.");
       toggleForm();
     }
   } catch (err) {
-    errorBox.innerText = "Network error. Please try again.";
     console.error(err);
+    showToast("Network error. Try again!", true);
   }
 
-  // Re-enable button in case of error or register success
   submitBtn.style.display = "block";
   loader.style.display = "none";
 });
+
+// Toast Function
+function showToast(msg, isError = false) {
+  const toast = document.getElementById("toast");
+  toast.innerText = msg;
+  toast.style.backgroundColor = isError ? "#e53935" : "#4caf50";
+  toast.className = "toast show";
+  setTimeout(() => {
+    toast.className = toast.className.replace("show", "");
+  }, 3000);
+}
