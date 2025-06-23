@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kids Study Hub</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to right, #fdfcfb, #e2d1c3);
+      color: #333;
+      text-align: center;
+    }
+
+    header {
+      background-color: #ff6f61;
+      color: white;
+      padding: 20px;
+      border-bottom: 5px dotted white;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    .subjects {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 30px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+      margin: 15px;
+      padding: 20px;
+      width: 250px;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card h2 {
+      color: #ff6f61;
+    }
+
+    .card p {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .card button {
+      background-color: #ff6f61;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .card button:hover {
+      background-color: #ff3b2e;
+    }
+
+    footer {
+      margin-top: 30px;
+      padding: 10px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📚 Kids Study Hub</h1>
+    <p>Learn with fun - Subjects made simple!</p>
+  </header>
+
+  <section class="subjects">
+
+    <!-- Maths -->
+    <div class="card">
+      <h2>🧮 Maths</h2>
+      <p>Play math games and solve puzzles with fun.</p>
+      <button onclick="window.open('https://www.coolmath4kids.com', '_blank')">Go to Cool Math</button>
+    </div>
+
+    <!-- Science -->
+    <div class="card">
+      <h2>🔬 Science</h2>
+      <p>Explore animals, nature, and simple experiments.</p>
+      <button onclick="window.open('https://kids.nationalgeographic.com', '_blank')">Go to Nat Geo Kids</button>
+    </div>
+
+    <!-- Hindi -->
+    <div class="card">
+      <h2>🗣️ Hindi</h2>
+      <p>Rhymes, poems, and basic Hindi learning fun.</p>
+      <button onclick="window.open('https://www.diksha.gov.in', '_blank')">Go to Diksha</button>
+    </div>
+
+    <!-- English -->
+    <div class="card">
+      <h2>📖 English</h2>
+      <p>Read stories, practice phonics, and vocabulary.</p>
+      <button onclick="window.open('https://www.starfall.com', '_blank')">Go to Starfall</button>
+    </div>
+
+    <!-- C Programming -->
+    <div class="card">
+     <h2>📖 C Programming</h2>
+      <p>Learn algorithms, practice C , and Usage.</p>
+      <button onclick="window.open('https://www.geeksforgeeks.org', '_blank')">Go to GeeksforGeeks</button>
+    </div>
+
+  </section>
+
+  <footer>
+    &copy; 2025 Kids Study Hub | Designed for young learners
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Kids App</title>
+    <!-- Cropper.js for avatar cropping -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+      }
+      .container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+      }
+      .hidden {
+        display: none;
+      }
+      /* Shared styles */
+      .form-group {
+        margin: 15px 0;
+        position: relative;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      button {
+        padding: 10px;
+        background: #4caf50;
+        border: none;
+        color: white;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+      }
+      button[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .spinner {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        width: 18px;
+        height: 18px;
+        margin-top: -9px;
+        border: 3px solid #fff;
+        border-top: 3px solid rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .switch {
+        text-align: center;
+        margin: 10px 0;
+        cursor: pointer;
+        color: #007bff;
+      }
+      .message {
+        text-align: center;
+        color: red;
+        margin: 10px 0;
+      }
+      #preview-container {
+        display: none;
+        margin: 15px 0;
+        text-align: center;
+      }
+      #preview {
+        max-width: 100%;
+        border: 1px solid #ccc;
+      }
+      /* Dashboard styles */
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .avatar-thumb {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+      .stars {
+        margin-left: auto;
+        font-size: 20px;
+      }
+      .button-row {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 20px 0;
+      }
+      .button-row button {
+        flex: 1;
+        margin: 0 10px;
+        padding: 80px;
+        font-size: 20px;
+        background: #2196f3;
+      }
+      .button-row button:hover {
+        background: #1976d2;
+      }
+      #backBtn {
+        display: none;
+        margin: 20px 0;
+        padding: 10px 20px;
+        font-size: 18px;
+        background: #ff9800;
+        border: none;
+        color: white;
+        cursor: pointer;
+        border-radius: 8px;
+      }
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+      .game-card {
+        width: 160px;
+        background: #f0f8ff;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+      }
+      .game-card:hover {
+        transform: translateY(-5px);
+      }
+      .game-card img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+      }
+      .game-card p {
+        padding: 10px;
+        font-weight: bold;
+      }
+      .quiz-levels {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+      .quiz-card {
+        background: #fff3cd;
+        border: 2px solid #ffeeba;
+        padding: 20px;
+        width: 200px;
+        text-align: center;
+        border-radius: 12px;
+        cursor: pointer;
+      }
+      .quiz-card:hover {
+        transform: scale(1.05);
+      }
+      .quiz-image {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+      }
+      .quiz-options button {
+        width: 100%;
+        margin: 5px 0;
+        padding: 12px;
+        font-size: 18px;
+        border: 2px solid #2196f3;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+      }
+      .quiz-options button.correct {
+        background: #4caf50;
+        color: white;
+      }
+      .quiz-options button.wrong {
+        background: #f44336;
+        color: white;
+      }
+      .quiz-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px auto;
+        max-width: 420px;
+      }
+      .quiz-navigation button {
+        flex: 1;
+        margin: 0 5px;
+        padding: 12px;
+        font-size: 18px;
+        background: #ff9800;
+        color: white;
+        border: none;
+        border-radius: 8px;
+      }
+      .quiz-navigation button:disabled {
+        background: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="authContainer">
+      <h2 id="authTitle">Login</h2>
+      <div id="form"></div>
+      <div class="switch" onclick="toggleForm()">
+        Don't have an account? Register
+      </div>
+      <div class="message" id="message"></div>
+    </div>
+
+    <div class="container hidden" id="dashboardContainer">
+      <div class="user-info">
+        <img src="" alt="avatar" id="dashAvatar" class="avatar-thumb" />
+        <h1>HOME</h1>
+        <div class="stars">⭐ <span id="starCount">0</span></div>
+      </div>
+      <!-- In your HTML -->
+      <div class="button-row" id="topMenu">
+        <button onclick="navigate('study')">📘 STUDY</button>
+        <button onclick="navigate('games')">🎮 GAMES</button>
+      </div>
+      <div class="button-row" id="bottomMenu">
+        <button onclick="navigate('quests')">📋 QUESTS</button>
+        <button onclick="navigate('room')">🏠 MY ROOM</button>
+      </div>
+
+      <button id="backBtn" onclick="backToMenu()">🔙 Back</button>
+      <div id="content"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script>
+      // ✔️ AUTH LOGIC
+      const authContainer = document.getElementById("authContainer");
+      const dashboardContainer = document.getElementById("dashboardContainer");
+      const dashAvatar = document.getElementById("dashAvatar");
+      let isLogin = true,
+        cropper,
+        avatarBlob;
+
+      function toggleForm() {
+        isLogin = !isLogin;
+        document.getElementById("authTitle").innerText = isLogin
+          ? "Login"
+          : "Register";
+        document.querySelector(".switch").innerText = isLogin
+          ? "Don't have an account? Register"
+          : "Already have an account? Login";
+        document.getElementById("message").innerText = "";
+        avatarBlob = null;
+        if (cropper) {
+          cropper.destroy();
+          cropper = null;
+        }
+        renderForm();
+      }
+
+      function renderForm() {
+        const c = document.getElementById("form");
+        if (isLogin) {
+          c.innerHTML = `
+        <div class="form-group"><input id="email" type="email" placeholder="Email"/></div>
+        <div class="form-group"><input id="password" type="password" placeholder="Password"/></div>
+        <button onclick="handleLogin()" id="submit-btn">Login</button>`;
+        } else {
+          c.innerHTML = `
+        <div class="form-group"><input id="name" type="text" placeholder="Name"/></div>
+        <div class="form-group"><input id="age" type="number" placeholder="Age"/></div>
+        <div class="form-group"><input id="class" type="text" placeholder="Class"/></div>
+        <div class="form-group"><input id="email" type="email" placeholder="Email"/></div>
+        <div class="form-group"><input id="password" type="password" placeholder="Password"/></div>
+        <div class="form-group"><input id="avatar-input" type="file" accept="image/*"/></div>
+        <div id="preview-container"><img id="preview"/></div>
+        <button onclick="handleRegister()" id="submit-btn">Register</button>`;
+          document
+            .getElementById("avatar-input")
+            .addEventListener("change", initCropper);
+        }
+      }
+
+      function initCropper(e) {
+        const f = e.target.files[0];
+        if (!f) return;
+        const img = document.getElementById("preview");
+        img.src = URL.createObjectURL(f);
+        document.getElementById("preview-container").style.display = "block";
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(img, { aspectRatio: 1, viewMode: 1 });
+      }
+
+      async function showLoading(btn, show) {
+        if (show) {
+          btn.disabled = true;
+          const s = document.createElement("div");
+          s.className = "spinner";
+          btn.appendChild(s);
+        } else {
+          btn.disabled = false;
+          const s = btn.querySelector(".spinner");
+          if (s) s.remove();
+        }
+      }
+
+      async function handleLogin() {
+        const email = document.getElementById("email").value.trim();
+        const pw = document.getElementById("password").value;
+        if (!email || !pw) return showMessage("Enter email & password");
+        const btn = document.getElementById("submit-btn");
+        await showLoading(btn, true);
+        try {
+          const r = await fetch(
+            "https://kidsappbackend.onrender.com/api/auth/login",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, pw: undefined, password: pw }),
+            }
+          );
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.message || "Login failed");
+          loginSuccess(d.token, d.user);
+        } catch (e) {
+          showMessage(e.message);
+        } finally {
+          showLoading(btn, false);
+        }
+      }
+
+      async function handleRegister() {
+        const name = document.getElementById("name").value.trim();
+        const age = document.getElementById("age").value.trim();
+        const cls = document.getElementById("class").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const pw = document.getElementById("password").value;
+        if (!name || !age || !cls || !email || !pw)
+          return showMessage("Fill all fields");
+        const btn = document.getElementById("submit-btn");
+        await showLoading(btn, true);
+        let avatarDataUrl = "";
+        if (cropper) {
+          const blob = await new Promise((r) =>
+            cropper.getCroppedCanvas({ width: 200, height: 200 }).toBlob(r)
+          );
+          avatarDataUrl = await new Promise((r) => {
+            const fr = new FileReader();
+            fr.onload = (e) => r(e.target.result);
+            fr.readAsDataURL(blob);
+          });
+        }
+        try {
+          const r = await fetch(
+            "https://kidsappbackend.onrender.com/api/auth/register",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name,
+                age,
+                class: cls,
+                email,
+                password: pw,
+                avatar: avatarDataUrl,
+              }),
+            }
+          );
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.message || "Register failed");
+          loginSuccess(d.token, d.user);
+        } catch (e) {
+          showMessage(e.message);
+        } finally {
+          showLoading(btn, false);
+        }
+      }
+
+      function showMessage(msg, ok = false) {
+        const d = document.getElementById("message");
+        d.innerText = msg;
+        d.style.color = ok ? "green" : "red";
+      }
+
+      function loginSuccess(token, user) {
+        document.cookie = `token=${token}; path=/; max-age=${7 * 24 * 60 * 60}`;
+        document.cookie = `user=${encodeURIComponent(
+          JSON.stringify(user)
+        )}; path=/; max-age=${7 * 24 * 60 * 60}`;
+        dashAvatar.src = user.avatarUrl || "https://via.placeholder.com/40";
+        starCount.innerText = localStorage.getItem("stars") || 0;
+        authContainer.classList.add("hidden");
+        dashboardContainer.classList.remove("hidden");
+      }
+
+      // ✔️ DASHBOARD LOGIC
+      function getJSONCookie(name) {
+        const c = document.cookie
+          .split("; ")
+          .find((x) => x.startsWith(name + "="));
+        if (!c) return null;
+        try {
+          return JSON.parse(decodeURIComponent(c.split("=")[1]));
+        } catch {
+          return null;
+        }
+      }
+
+      function navigate(sec) {
+        // Hide both menus first
+        topMenu.style.display = "none";
+        bottomMenu.style.display = "none";
+        backBtn.style.display = "inline-block";
+
+        // Show content based on sec
+        if (sec === "study") {
+          // In Study view - hide top buttons
+          content.innerHTML = `
+      <h2>📘 Study Subjects</h2>
+      <ul>
+        <li><a href="https://www.coolmath4kids.com/" target="_blank">Coolmath4Kids</a></li>
+        <li><a href="https://kids.nationalgeographic.com/" target="_blank">Nat Geo Kids</a></li>
+        <li><a href="https://www.starfall.com/" target="_blank">Starfall</a></li>
+      </ul>`;
+        } else if (sec === "games") {
+          // In Games view - hide top buttons
+          content.innerHTML = `
+      <h2>🎮 Games</h2>
+      <div class="card-container">
+        <!-- your games cards here -->
+      </div>`;
+        } else if (sec === "quests") {
+          // In quests view - hide top buttons
+          content.innerHTML = `
+      <h2>📋 Quests</h2>
+      <div class="quiz-levels">
+        <div class="quiz-card" onclick="startQuiz('general')">General</div>
+        <div class="quiz-card" onclick="startQuiz('animals')">Animals</div>
+        <div class="quiz-card" onclick="startQuiz('spelling')">Spelling</div>
+      </div>`;
+        } else if (sec === "room") {
+          // In My Room - you can choose to show bottom menu or not
+          content.innerHTML = `
+      <h2>🏠 My Room</h2>
+      <p>You earned:</p>
+      <div style="font-size:60px;color:gold;">⭐ ${
+        localStorage.getItem("stars") || 0
+      }</div>
+      <p>Keep earning more!</p>`;
+        }
+      }
+
+      backBtn.onclick = () => {
+        // Show menus again
+        topMenu.style.display = "flex";
+        bottomMenu.style.display = "flex";
+        backBtn.style.display = "none";
+        content.innerHTML = "";
+      };
+
+      // Quiz system simplified...
+      const quizData = {
+        /* ... same quizData ... */
+      };
+      let currentLevel,
+        currentIdx = 0,
+        currentQuiz = [],
+        qScore = 0;
+
+      function startQuiz(l) {
+        currentLevel = l;
+        currentQuiz = quizData[l];
+        currentIdx = parseInt(localStorage.getItem(l + "_idx")) || 0;
+        qScore = parseInt(localStorage.getItem(l + "_score")) || 0;
+        navigate("quests"); // ensure proper section visible
+        renderQuestion();
+      }
+
+      function renderQuestion() {
+        const q = currentQuiz[currentIdx];
+        content.innerHTML = `
+      <h2>${lCase(currentLevel)} Quiz Q${currentIdx + 1}/${
+          currentQuiz.length
+        }</h2>
+      ${q.image ? `<img src="${q.image}" class="quiz-image"/>` : ``}
+      <p>${q.question}</p>
+      <div class="quiz-options">${q.options
+        .map((o) => `<button onclick="answer('${o}',this)">${o}</button>`)
+        .join("")}</div>
+      <div class="quiz-navigation"><button onclick="prevQ()" ${
+        currentIdx === 0 ? "disabled" : ""
+      }>⬅️Prev</button><button onclick="nextQ()" ${
+          currentIdx === currentQuiz.length - 1 ? "disabled" : ""
+        }>Next➡️</button></div>
+      <p>⭐ Score: <span id="quizScore">${qScore}</span></p>`;
+        const saved = JSON.parse(
+          localStorage.getItem(currentLevel + "_ans") || "{}"
+        );
+        if (saved[currentIdx]) disableOptions(saved[currentIdx]);
+      }
+
+      function answer(opt, btn) {
+        const saved = JSON.parse(
+          localStorage.getItem(currentLevel + "_ans") || "{}"
+        );
+        if (saved[currentIdx]) return;
+        const correct = currentQuiz[currentIdx].answer;
+        document
+          .querySelectorAll(".quiz-options button")
+          .forEach((b) => (b.disabled = true));
+        if (opt === correct) {
+          btn.classList.add("correct");
+          qScore++;
+          starsUp();
+        } else {
+          btn.classList.add("wrong");
+          document
+            .querySelector(`.quiz-options button:contains('${correct}')`)
+            ?.classList.add("correct");
+        }
+        saved[currentIdx] = opt;
+        localStorage.setItem(currentLevel + "_ans", JSON.stringify(saved));
+        localStorage.setItem(currentLevel + "_score", qScore);
+        localStorage.setItem(currentLevel + "_idx", currentIdx);
+        document.getElementById("quizScore").innerText = qScore;
+      }
+
+      function disableOptions(sel) {
+        const correct = currentQuiz[currentIdx].answer;
+        document.querySelectorAll(".quiz-options button").forEach((b) => {
+          b.disabled = true;
+          if (b.innerText === sel && sel === correct)
+            b.classList.add("correct");
+          if (b.innerText === sel && sel !== correct) b.classList.add("wrong");
+          if (b.innerText === correct) b.classList.add("correct");
+        });
+      }
+
+      function nextQ() {
+        if (currentIdx < currentQuiz.length - 1) {
+          currentIdx++;
+          localStorage.setItem(currentLevel + "_idx", currentIdx);
+          renderQuestion();
+        }
+      }
+      function prevQ() {
+        if (currentIdx > 0) {
+          currentIdx--;
+          localStorage.setItem(currentLevel + "_idx", currentIdx);
+          renderQuestion();
+        }
+      }
+      function lCase(s) {
+        return s.charAt(0).toUpperCase() + s.slice(1);
+      }
+
+      function starsUp() {
+        let st = parseInt(localStorage.getItem("stars")) || 0;
+        st++;
+        localStorage.setItem("stars", st);
+        starCount.innerText = st;
+      }
+
+      // On load check cookie
+      const savedUser = getJSONCookie("user");
+      const savedToken = document.cookie
+        .split("; ")
+        .find((c) => c.startsWith("token="))
+        ?.split("=")[1];
+      if (savedUser && savedToken) {
+        loginSuccess(savedToken, savedUser);
+      } else {
+        renderForm();
+      }
+    </script>
+  </body>
+</html>

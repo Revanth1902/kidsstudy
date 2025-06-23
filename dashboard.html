@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kids App</title>
+    <style>
+      body {
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        background: linear-gradient(to bottom, #87ceeb, #ffffff);
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+      }
+
+      header .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+
+      .stars {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 20px;
+        margin-left: auto;
+      }
+
+      .button-row {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 20px 0;
+      }
+
+      button {
+        flex: 1;
+        margin: 0 10px;
+        padding: 80px;
+        font-size: 20px;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #1976d2;
+      }
+
+      #content {
+        margin-top: 20px;
+      }
+
+      ul {
+        padding-left: 20px;
+      }
+
+      ul li {
+        margin-bottom: 8px;
+      }
+
+      h2,
+      h3 {
+        margin-top: 20px;
+      }
+
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .game-card {
+        width: 160px;
+        background-color: #f0f8ff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .game-card img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+      }
+
+      .game-card p {
+        margin: 10px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .quiz-levels {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+
+      .quiz-card {
+        background: #fff3cd;
+        border: 2px solid #ffeeba;
+        padding: 20px;
+        border-radius: 12px;
+        width: 200px;
+        text-align: center;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .quiz-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Quiz styling */
+      .quiz-question {
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+
+      .quiz-image {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+      }
+
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .quiz-options button {
+        font-size: 18px;
+        padding: 12px;
+        border: 2px solid #2196f3;
+        background-color: white;
+        color: #2196f3;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .quiz-options button:hover {
+        background-color: #2196f3;
+        color: white;
+      }
+
+      .quiz-options button.correct {
+        background-color: #4caf50;
+        color: white;
+        border-color: #4caf50;
+        cursor: default;
+      }
+
+      .quiz-options button.wrong {
+        background-color: #f44336;
+        color: white;
+        border-color: #f44336;
+        cursor: default;
+      }
+
+      .quiz-navigation {
+        display: flex;
+        justify-content: space-between;
+        max-width: 420px;
+        margin: auto;
+        gap: 10px;
+      }
+
+      .quiz-navigation button {
+        flex: 1;
+        padding: 12px 0;
+        font-size: 18px;
+        background-color: #ff9800;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .quiz-navigation button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="user-info">
+          <img src="" alt="avatar" id="dashAvatar" class="avatar-thumb" />
+          <h1>HOME</h1>
+          <div class="stars">⭐ <span id="starCount">0</span></div>
+        </div>
+      </header>
+
+      <main>
+        <div id="mainMenu" class="button-row-wrapper">
+          <div class="button-row">
+            <button onclick="navigate('study')">📘 STUDY</button>
+            <button onclick="navigate('games')">🎮 GAMES</button>
+          </div>
+          <div class="button-row">
+            <button onclick="navigate('quests')">📋 QUESTS</button>
+            <button onclick="navigate('room')">🏠 MY ROOM</button>
+          </div>
+        </div>
+
+        <button
+          id="backBtn"
+          onclick="goBack()"
+          style="
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 8px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            cursor: pointer;
+          "
+        >
+          🔙 Back
+        </button>
+
+        <div id="content"></div>
+      </main>
+    </div>
+
+    <script>
+      const dashAvatar = document.getElementById("dashAvatar");
+      document.cookie = `token=${token}; path=/; max-age=${7 * 24 * 60 * 60}`;
+      document.cookie = `user=${encodeURIComponent(
+        JSON.stringify(user)
+      )}; path=/; max-age=${7 * 24 * 60 * 60}`;
+      dashAvatar.src =
+        user.avatarUrl ||
+        "https://www.gstatic.com/flutter-onestack-prototype/genui/example_1.jpg";
+      starCount.innerText = localStorage.getItem("stars") || 0;
+
+      let stars = Number(localStorage.getItem("stars") || 0);
+      const starDisplay = document.getElementById("starCount");
+      const contentDiv = document.getElementById("content");
+      const mainMenu = document.getElementById("mainMenu");
+      const backBtn = document.getElementById("backBtn");
+
+      const quizData = {
+        general: [
+          {
+            question: "How many fingers do you have on one hand?",
+            options: ["4", "5", "6", "7"],
+            answer: "5",
+            image: "https://cdn-icons-png.flaticon.com/512/201/201818.png",
+          },
+          {
+            question: "What is the person doing?",
+            options: ["Running", "Sleeping", "Eating", "Singing"],
+            answer: "Running",
+            image: "https://cdn-icons-png.flaticon.com/512/1404/1404945.png",
+          },
+          {
+            question: "What is the person doing?",
+            options: ["Sleeping", "Dancing", "Swimming", "Reading"],
+            answer: "Sleeping",
+            image: "https://cdn-icons-png.flaticon.com/512/3754/3754548.png",
+          },
+          {
+            question: "What is shown in the image?",
+            options: ["Apple", "Banana", "Orange", "Pear"],
+            answer: "Apple",
+            image: "https://cdn-icons-png.flaticon.com/512/415/415733.png",
+          },
+          {
+            question: "Which shape is this?",
+            options: ["Circle", "Triangle", "Square", "Rectangle"],
+            answer: "Square",
+            image: "https://cdn-icons-png.flaticon.com/512/32/32177.png",
+          },
+          {
+            question: "How many wheels on a bicycle?",
+            options: ["1", "2", "3", "4"],
+            answer: "2",
+            image: "https://cdn-icons-png.flaticon.com/512/743/743922.png",
+          },
+          {
+            question: "What color is a banana?",
+            options: ["Red", "Yellow", "Green", "Blue"],
+            answer: "Yellow",
+            image: "https://cdn-icons-png.flaticon.com/512/415/415733.png",
+          },
+          {
+            question: "What do we use to write?",
+            options: ["Pen", "Fork", "Shoe", "Ball"],
+            answer: "Pen",
+            image: "https://cdn-icons-png.flaticon.com/512/291/291853.png",
+          },
+          {
+            question: "What day comes after Monday?",
+            options: ["Sunday", "Tuesday", "Wednesday", "Friday"],
+            answer: "Tuesday",
+            image: "https://cdn-icons-png.flaticon.com/512/2922/2922551.png",
+          },
+          {
+            question: "Which animal says 'meow'?",
+            options: ["Dog", "Cat", "Cow", "Bird"],
+            answer: "Cat",
+            image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
+          },
+        ],
+        animals: [
+          {
+            question: "What animal is this?",
+            options: ["Dog", "Cat", "Bird", "Elephant"],
+            answer: "Elephant",
+            image: "https://cdn-icons-png.flaticon.com/512/1998/1998618.png",
+          },
+          {
+            question: "Which animal is shown?",
+            options: ["Tiger", "Lion", "Leopard", "Cheetah"],
+            answer: "Tiger",
+            image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
+          },
+          {
+            question: "Which animal is this?",
+            options: ["Monkey", "Bear", "Giraffe", "Elephant"],
+            answer: "Giraffe",
+            image: "https://cdn-icons-png.flaticon.com/512/2962/2962137.png",
+          },
+          {
+            question: "What animal has a long neck?",
+            options: ["Zebra", "Horse", "Giraffe", "Kangaroo"],
+            answer: "Giraffe",
+            image: "https://cdn-icons-png.flaticon.com/512/2962/2962137.png",
+          },
+          {
+            question: "What animal barks?",
+            options: ["Cat", "Dog", "Cow", "Lion"],
+            answer: "Dog",
+            image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
+          },
+          {
+            question: "Which animal lives in water?",
+            options: ["Dolphin", "Lion", "Eagle", "Horse"],
+            answer: "Dolphin",
+            image: "https://cdn-icons-png.flaticon.com/512/2919/2919750.png",
+          },
+          {
+            question: "What animal says 'moo'?",
+            options: ["Sheep", "Cow", "Pig", "Goat"],
+            answer: "Cow",
+            image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
+          },
+          {
+            question: "What animal has stripes?",
+            options: ["Lion", "Tiger", "Bear", "Cat"],
+            answer: "Tiger",
+            image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
+          },
+          {
+            question: "Which animal hops?",
+            options: ["Rabbit", "Horse", "Kangaroo", "Dog"],
+            answer: "Kangaroo",
+            image: "https://cdn-icons-png.flaticon.com/512/572/572213.png",
+          },
+          {
+            question: "What animal flies?",
+            options: ["Penguin", "Ostrich", "Eagle", "Kangaroo"],
+            answer: "Eagle",
+            image: "https://cdn-icons-png.flaticon.com/512/1597/1597730.png",
+          },
+        ],
+        spelling: [
+          {
+            question: "Spell the word for the baby of a dog.",
+            options: ["Pupy", "Puppy", "Puppie", "Pup"],
+            answer: "Puppy",
+          },
+          {
+            question: "Spell the color of grass.",
+            options: ["Green", "Grene", "Grean", "Grin"],
+            answer: "Green",
+          },
+          {
+            question: "Spell the season after winter.",
+            options: ["Spring", "Sprng", "Sprin", "String"],
+            answer: "Spring",
+          },
+          {
+            question: "Spell the number between three and five.",
+            options: ["Four", "For", "Foor", "Fr"],
+            answer: "Four",
+          },
+          {
+            question: "Spell the day after Monday.",
+            options: ["Tusday", "Tuesay", "Tuesday", "Turday"],
+            answer: "Tuesday",
+          },
+          {
+            question: "Spell the word for a male child.",
+            options: ["Boy", "Boi", "Boiy", "Buy"],
+            answer: "Boy",
+          },
+          {
+            question: "Spell the opposite of night.",
+            options: ["Day", "Daye", "Dey", "Dai"],
+            answer: "Day",
+          },
+          {
+            question: "Spell the fruit that is yellow and curved.",
+            options: ["Banana", "Bananna", "Banenaa", "Bananna"],
+            answer: "Banana",
+          },
+          {
+            question: "Spell what you wear on feet.",
+            options: ["Shoe", "Shoo", "Show", "Sho"],
+            answer: "Shoe",
+          },
+          {
+            question: "Spell the opposite of big.",
+            options: ["Small", "Smoll", "Smal", "Smaal"],
+            answer: "Small",
+          },
+        ],
+      };
+
+      let currentQuizLevel = null;
+      let currentQuizIndex = 0;
+      let currentQuizSet = [];
+      let score = 0;
+
+      function startQuiz(level) {
+        currentQuizLevel = level;
+        currentQuizSet = quizData[level];
+        currentQuizIndex = Number(localStorage.getItem(level + "_idx")) || 0;
+        score = Number(localStorage.getItem(level + "_score")) || 0;
+        mainMenu.style.display = "none";
+        backBtn.style.display = "inline-block";
+        showQuestion();
+        updateStars();
+      }
+
+      function showQuestion() {
+        const q = currentQuizSet[currentQuizIndex];
+        contentDiv.innerHTML = `
+          <h2>${capitalize(currentQuizLevel)} Quiz – Q${
+          currentQuizIndex + 1
+        } / ${currentQuizSet.length}</h2>
+          ${q.image ? `<img src="${q.image}" class="quiz-image" />` : ""}
+          <p>${q.question}</p>
+          <div class="quiz-options">
+            ${q.options
+              .map(
+                (o) =>
+                  `<button onclick="selectAnswer('${o}', this)">${o}</button>`
+              )
+              .join("")}
+          </div>
+          <div class="quiz-navigation">
+            <button onclick="prevQuestion()" ${
+              currentQuizIndex === 0 ? "disabled" : ""
+            }>⬅️ Previous</button>
+            <button onclick="nextQuestion()" ${
+              currentQuizIndex === currentQuizSet.length - 1 ? "disabled" : ""
+            }>Next ➡️</button>
+          </div>
+          <p>⭐ Score: <span id="quizScore">${score}</span></p>
+        `;
+
+        const saved = JSON.parse(
+          localStorage.getItem(currentQuizLevel + "_ans") || "{}"
+        );
+        if (saved[currentQuizIndex] !== undefined)
+          disableOptions(saved[currentQuizIndex]);
+      }
+
+      function selectAnswer(opt, btn) {
+        const saved = JSON.parse(
+          localStorage.getItem(currentQuizLevel + "_ans") || "{}"
+        );
+        if (saved[currentQuizIndex] !== undefined) return; // already answered
+
+        const correct = currentQuizSet[currentQuizIndex].answer;
+        document
+          .querySelectorAll(".quiz-options button")
+          .forEach((b) => (b.disabled = true));
+
+        if (opt === correct) {
+          btn.classList.add("correct");
+          score++;
+        } else {
+          btn.classList.add("wrong");
+          document.querySelectorAll(".quiz-options button").forEach((b) => {
+            if (b.textContent === correct) b.classList.add("correct");
+          });
+        }
+
+        saved[currentQuizIndex] = opt;
+        localStorage.setItem(currentQuizLevel + "_ans", JSON.stringify(saved));
+        localStorage.setItem(currentQuizLevel + "_score", score);
+        localStorage.setItem(currentQuizLevel + "_idx", currentQuizIndex);
+
+        stars += opt === correct ? 1 : 0;
+        localStorage.setItem("stars", stars);
+        updateStars();
+        document.getElementById("quizScore").textContent = score;
+      }
+
+      function disableOptions(selected) {
+        const correct = currentQuizSet[currentQuizIndex].answer;
+        document.querySelectorAll(".quiz-options button").forEach((b) => {
+          b.disabled = true;
+          if (b.textContent === selected && selected === correct)
+            b.classList.add("correct");
+          else if (b.textContent === selected && selected !== correct)
+            b.classList.add("wrong");
+          else if (b.textContent === correct) b.classList.add("correct");
+        });
+      }
+
+      function nextQuestion() {
+        if (currentQuizIndex < currentQuizSet.length - 1) {
+          currentQuizIndex++;
+          localStorage.setItem(currentQuizLevel + "_idx", currentQuizIndex);
+          showQuestion();
+        }
+      }
+
+      function prevQuestion() {
+        if (currentQuizIndex > 0) {
+          currentQuizIndex--;
+          localStorage.setItem(currentQuizLevel + "_idx", currentQuizIndex);
+          showQuestion();
+        }
+      }
+
+      function navigate(section) {
+        backBtn.style.display = "inline-block";
+        mainMenu.style.display = "none";
+        if (section === "quests") showQuestsSection();
+        else if (section === "study") showStudySection();
+        else if (section === "games") showGamesSection();
+        else if (section === "room") showRoomSection();
+      }
+
+      function backToMenu() {
+        currentQuizLevel = null;
+        contentDiv.innerHTML = "";
+        backBtn.style.display = "none";
+        mainMenu.style.display = "flex";
+      }
+
+      backBtn.onclick = backToMenu;
+
+      function showQuestsSection() {
+        contentDiv.innerHTML = `
+          <h2>📋 Quests (Choose a Quiz)</h2>
+          <div class="quiz-levels">
+            <div class="quiz-card" onclick="startQuiz('general')">General</div>
+            <div class="quiz-card" onclick="startQuiz('animals')">Animals</div>
+            <div class="quiz-card" onclick="startQuiz('spelling')">Spelling</div>
+          </div>`;
+      }
+
+      function updateStars() {
+        starDisplay.textContent = stars;
+      }
+
+      function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      }
+
+      function showStudySection() {
+        contentDiv.innerHTML = `
+           <h2>📘 Study Subjects</h2>
+                <ul>
+                  <li><a href="https://www.coolmath4kids.com/" target="_blank">Coolmath4Kids</a></li>
+                  <li><a href="https://kids.nationalgeographic.com/" target="_blank">Nat Geo Kids</a></li>
+                  <li><a href="https://www.starfall.com/" target="_blank">Starfall</a></li>
+                </ul>
+          `;
+      }
+
+      function showGamesSection() {
+        contentDiv.innerHTML = `
+            <h2>🎮 Games</h2>
+            <div class="card-container">
+              <div class="game-card" onclick="window.open('https://www.abcya.com/games/tic_tac_toe', '_blank')">
+                <img src="https://plus.maths.org/content/sites/plus.maths.org/files/blog/082014/tictac.jpg" alt="Tic Tac Toe">
+                <p>Tic Tac Toe</p>
+              </div>
+              <div class="game-card" onclick="window.open('https://pbskids.org/games/coloring-pages', '_blank')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE7LeTyq2r27rd2fv3essysWXqnEw6UQNxU2mEar73n4w2zTGlEbAXth71_Qs_NcciCAE&usqp=CAU" alt="Kids Coloring">
+                <p>Kids Coloring</p>
+              </div>
+              <div class="game-card" onclick="window.open('https://www.virtualpiano.net/', '_blank')">
+                <img src="https://static.playhop.com/images/6500e_1890793_0bc98/51f87ff7f/2a00000183a001dd_dfc293b/0eb42387e0b011adb9ad_4ab32e/orig" alt="Piano For Kids">
+                <p>Piano For Kids</p>
+              </div>
+              <div class="game-card" onclick="window.open('https://pbskids.org/games/memory', '_blank')">
+                <img src="https://www.memozor.com/templates/memoire/images/zoom/matching_games_memory_kids_online_free.jpg" alt="Memory Match">
+                <p>Memory Match</p>
+              </div>
+              <div class="game-card" onclick="window.open('https://pbskids.org/games/shape', '_blank')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy1jApvjqvStiXRdfcKbi5Vb4IBRKoWzkEVg&s" alt="Shape Puzzle">
+                <p>Shape Puzzle</p>
+              </div>
+            </div>
+          `;
+      }
+
+      function showQuestsSection() {
+        contentDiv.innerHTML = `
+          <h2>📋 Quests (Choose Quiz)</h2>
+          <div class="quiz-levels">
+            <div class="quiz-card" onclick="startQuiz('general')">General</div>
+            <div class="quiz-card" onclick="startQuiz('animals')">Animals</div>
+            <div class="quiz-card" onclick="startQuiz('spelling')">Spelling</div>
+          </div>`;
+      }
+
+      function showRoomSection() {
+        contentDiv.innerHTML = `
+             <h2>🏠 My Room</h2>
+                <p>You've earned:</p>
+                <div style="font-size: 60px; color: gold;">⭐ ${stars}</div>
+                <p>Keep exploring and earning more stars!</p>
+          `;
+      }
+
+      updateStars();
+    </script>
+  </body>
+</html>
