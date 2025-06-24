@@ -622,62 +622,33 @@
         return str.charAt(0).toUpperCase() + str.slice(1);
       }
 
+      function loadSection(file) {
+        fetch(file)
+          .then((response) => response.text())
+          .then((html) => {
+            contentDiv.innerHTML = html;
+          })
+          .catch((error) => {
+            console.error("Error loading section:", error);
+            contentDiv.innerHTML =
+              "<p>Sorry, something went wrong loading the content.</p>";
+          });
+      }
+
       function showStudySection() {
-        contentDiv.innerHTML = `
-           <h2>📘 Study Subjects</h2>
-                <ul>
-                  <li><a href="https://www.coolmath4kids.com/" target="_blank">Coolmath4Kids</a></li>
-                  <li><a href="https://kids.nationalgeographic.com/" target="_blank">Nat Geo Kids</a></li>
-                  <li><a href="https://www.starfall.com/" target="_blank">Starfall</a></li>
-                </ul>
-          `;
+        loadSection("study.html");
       }
 
       function showGamesSection() {
-        contentDiv.innerHTML = `
-            <h2>🎮 Games</h2>
-            <div class="card-container">
-              <div class="game-card" onclick="window.open('https://www.abcya.com/games/tic_tac_toe', '_blank')">
-                <img src="https://plus.maths.org/content/sites/plus.maths.org/files/blog/082014/tictac.jpg" alt="Tic Tac Toe">
-                <p>Tic Tac Toe</p>
-              </div>
-              <div class="game-card" onclick="window.open('https://pbskids.org/games/coloring-pages', '_blank')">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE7LeTyq2r27rd2fv3essysWXqnEw6UQNxU2mEar73n4w2zTGlEbAXth71_Qs_NcciCAE&usqp=CAU" alt="Kids Coloring">
-                <p>Kids Coloring</p>
-              </div>
-              <div class="game-card" onclick="window.open('https://www.virtualpiano.net/', '_blank')">
-                <img src="https://static.playhop.com/images/6500e_1890793_0bc98/51f87ff7f/2a00000183a001dd_dfc293b/0eb42387e0b011adb9ad_4ab32e/orig" alt="Piano For Kids">
-                <p>Piano For Kids</p>
-              </div>
-              <div class="game-card" onclick="window.open('https://pbskids.org/games/memory', '_blank')">
-                <img src="https://www.memozor.com/templates/memoire/images/zoom/matching_games_memory_kids_online_free.jpg" alt="Memory Match">
-                <p>Memory Match</p>
-              </div>
-              <div class="game-card" onclick="window.open('https://pbskids.org/games/shape', '_blank')">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy1jApvjqvStiXRdfcKbi5Vb4IBRKoWzkEVg&s" alt="Shape Puzzle">
-                <p>Shape Puzzle</p>
-              </div>
-            </div>
-          `;
+        loadSection("games.html");
       }
 
       function showQuestsSection() {
-        contentDiv.innerHTML = `
-          <h2>📋 Quests (Choose Quiz)</h2>
-          <div class="quiz-levels">
-            <div class="quiz-card" onclick="startQuiz('general')">General</div>
-            <div class="quiz-card" onclick="startQuiz('animals')">Animals</div>
-            <div class="quiz-card" onclick="startQuiz('spelling')">Spelling</div>
-          </div>`;
+        loadSection("quest.html");
       }
 
       function showRoomSection() {
-        contentDiv.innerHTML = `
-             <h2>🏠 My Room</h2>
-                <p>You've earned:</p>
-                <div style="font-size: 60px; color: gold;">⭐ ${stars}</div>
-                <p>Keep exploring and earning more stars!</p>
-          `;
+        loadSection("room.html");
       }
 
       updateStars();
