@@ -540,6 +540,24 @@
         if (opt === correct) {
           btn.classList.add("correct");
           score++;
+
+          // Add this
+          const token = localStorage.getItem("authToken");
+          fetch("https://kidsappbackend.onrender.com/api/scores", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // You must have stored token at login
+            },
+            body: JSON.stringify({ score: 1 }), // Add 1 star
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log("Stars updated:", data.stars);
+            })
+            .catch((err) => {
+              console.error("Error updating stars:", err);
+            });
         } else {
           btn.classList.add("wrong");
           document.querySelectorAll(".quiz-options button").forEach((b) => {
@@ -646,9 +664,8 @@
       function showQuestsSection() {
         loadSection("quest.html");
       }
-
       function showRoomSection() {
-        loadSection("room.html");
+        window.location.href = "room.html";
       }
 
       updateStars();

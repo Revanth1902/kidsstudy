@@ -9,6 +9,18 @@
     <div class="auth-container">
       <h2 id="form-title">Login</h2>
       <form id="auth-form">
+        <!-- Register-only fields -->
+        <div id="register-fields" class="hidden">
+          <input type="text" id="name" placeholder="Name" />
+          <input type="number" id="age" placeholder="Age" min="1" max="100" />
+          <input type="text" id="class" placeholder="Class" />
+          <input type="file" id="avatar" accept="image/*" />
+          <div id="avatar-preview-container" style="display: none">
+            <img id="avatar-preview" src="#" alt="Avatar Preview" />
+          </div>
+        </div>
+
+        <!-- Common fields -->
         <input type="email" id="email" placeholder="Email" required />
         <input type="password" id="password" placeholder="Password" required />
         <button type="submit" id="submit-btn">Login</button>
@@ -17,7 +29,7 @@
 
       <p id="toggle-msg">
         Don't have an account?
-        <a href="#" id="toggle-link" onclick="toggleForm()">Register</a>
+        <a href="#" onclick="toggleForm()">Register</a>
       </p>
       <p id="auth-error" class="error-text"></p>
     </div>
