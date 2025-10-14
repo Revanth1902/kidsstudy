@@ -495,29 +495,29 @@
       function showQuestion() {
         const q = currentQuizSet[currentQuizIndex];
         contentDiv.innerHTML = `
-            <h2>${capitalize(currentQuizLevel)} Quiz – Q${
+          <h2>${capitalize(currentQuizLevel)} Quiz – Q${
           currentQuizIndex + 1
         } / ${currentQuizSet.length}</h2>
-            ${q.image ? `<img src="${q.image}" class="quiz-image" />` : ""}
-            <p>${q.question}</p>
-            <div class="quiz-options">
-              ${q.options
-                .map(
-                  (o) =>
-                    `<button onclick="selectAnswer('${o}', this)">${o}</button>`
-                )
-                .join("")}
-            </div>
-            <div class="quiz-navigation">
-              <button onclick="prevQuestion()" ${
-                currentQuizIndex === 0 ? "disabled" : ""
-              }>⬅️ Previous</button>
-              <button onclick="nextQuestion()" ${
-                currentQuizIndex === currentQuizSet.length - 1 ? "disabled" : ""
-              }>Next ➡️</button>
-            </div>
-            <p>⭐ Score: <span id="quizScore">${score}</span></p>
-          `;
+          ${q.image ? `<img src="${q.image}" class="quiz-image" />` : ""}
+          <p>${q.question}</p>
+          <div class="quiz-options">
+            ${q.options
+              .map(
+                (o) =>
+                  `<button onclick="selectAnswer('${o}', this)">${o}</button>`
+              )
+              .join("")}
+          </div>
+          <div class="quiz-navigation">
+            <button onclick="prevQuestion()" ${
+              currentQuizIndex === 0 ? "disabled" : ""
+            }>⬅️ Previous</button>
+            <button onclick="nextQuestion()" ${
+              currentQuizIndex === currentQuizSet.length - 1 ? "disabled" : ""
+            }>Next ➡️</button>
+          </div>
+          <p>⭐ Score: <span id="quizScore">${score}</span></p>
+        `;
 
         const saved = JSON.parse(
           localStorage.getItem(currentQuizLevel + "_ans") || "{}"
@@ -549,7 +549,7 @@
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`, // You must have stored token at login
             },
-            body: JSON.stringify({ score: score + 1 }),
+            body: JSON.stringify({ score: 1 }), // Add 1 star
           })
             .then((res) => res.json())
             .then((data) => {
@@ -624,12 +624,12 @@
 
       function showQuestsSection() {
         contentDiv.innerHTML = `
-            <h2>📋 Quests (Choose a Quiz)</h2>
-            <div class="quiz-levels">
-              <div class="quiz-card" onclick="startQuiz('general')">General</div>
-              <div class="quiz-card" onclick="startQuiz('animals')">Animals</div>
-              <div class="quiz-card" onclick="startQuiz('spelling')">Spelling</div>
-            </div>`;
+          <h2>📋 Quests (Choose a Quiz)</h2>
+          <div class="quiz-levels">
+            <div class="quiz-card" onclick="startQuiz('general')">General</div>
+            <div class="quiz-card" onclick="startQuiz('animals')">Animals</div>
+            <div class="quiz-card" onclick="startQuiz('spelling')">Spelling</div>
+          </div>`;
       }
 
       function updateStars() {
