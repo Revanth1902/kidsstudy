@@ -1,607 +1,582 @@
-<style>
-  body {
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    background: linear-gradient(to right, #a1c4fd, #c2e9fb);
-    text-align: center;
-    padding: 20px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kids Quests</title>
+    <style>
+      body {
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+        text-align: center;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+      }
 
-  h2 {
-    font-size: 32px;
-    margin-bottom: 20px;
-    color: #333;
-  }
+      h2 {
+        font-size: 32px;
+        margin-bottom: 20px;
+        color: #333;
+      }
 
-  .quest-card {
-    background-color: #fffde7;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    margin: 15px auto;
-    width: 320px;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
+      .quest-card {
+        background-color: #fffde7;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        margin: 15px auto;
+        width: 320px;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
 
-  .quest-card:hover {
-    transform: scale(1.03);
-  }
+      .quest-card:hover {
+        transform: scale(1.03);
+      }
 
-  .quest-content {
-    display: flex;
-    align-items: center;
-  }
+      .quest-content {
+        display: flex;
+        align-items: center;
+      }
 
-  .quest-content img {
-    width: 32px;
-    height: 32px;
-    margin-right: 10px;
-  }
+      .quest-content img {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+      }
 
-  .quest-title {
-    font-size: 18px;
-    color: #444;
-  }
+      .quest-title {
+        font-size: 18px;
+        color: #444;
+      }
 
-  .quest-badge img {
-    width: 28px;
-    height: 28px;
-  }
+      .quest-badge img {
+        width: 28px;
+        height: 28px;
+      }
 
-  .quiz-options {
-    margin: 15px 0;
-  }
+      .quiz-options {
+        margin: 15px 0;
+      }
 
-  .quiz-options button {
-    margin: 8px;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    background-color: #f0f0f0;
-    transition: background-color 0.3s;
-  }
+      .quiz-options button {
+        margin: 8px;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        background-color: #f0f0f0;
+        transition: background-color 0.3s;
+      }
 
-  .quiz-options button.correct {
-    background-color: #c8e6c9;
-    color: #2e7d32;
-    cursor: default;
-  }
+      .quiz-options button.correct {
+        background-color: #c8e6c9;
+        color: #2e7d32;
+        cursor: default;
+      }
 
-  .quiz-options button.wrong {
-    background-color: #ffcdd2;
-    color: #c62828;
-    cursor: default;
-  }
+      .quiz-options button.wrong {
+        background-color: #ffcdd2;
+        color: #c62828;
+        cursor: default;
+      }
 
-  .quiz-navigation {
-    margin-top: 20px;
-  }
+      .quiz-navigation {
+        margin-top: 20px;
+      }
 
-  .quiz-navigation button,
-  #submitQuizBtn,
-  #backToQuestsBtn {
-    padding: 8px 16px;
-    font-size: 14px;
-    margin: 0 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-    background-color: #4a90e2;
-    color: white;
-    transition: background-color 0.3s;
-  }
-
-  .quiz-navigation button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    color: #666;
-  }
-
-  #submitQuizBtn {
-    margin-top: 20px;
-    background-color: #28a745;
-  }
-  #submitQuizBtn:disabled {
-    background-color: #98d7a5;
-    cursor: not-allowed;
-  }
-
-  .quiz-image {
-    width: 100px;
-    height: auto;
-    margin: 10px 0;
-  }
-
-  /* Certificate styling */
-  #certificate {
-    background: white;
-    border: 5px solid #ff6347;
-    border-radius: 20px;
-    padding: 30px;
-    max-width: 400px;
-    margin: 20px auto;
-    box-shadow: 0 0 20px #ff6347aa;
-  }
-
-  #certificate h2 {
-    color: #ff6347;
-  }
-
-  #certificate p {
-    font-size: 20px;
-    margin: 20px 0;
-    color: #333;
-  }
-</style>
-
-<!-- Quests List Container -->
-<div id="questsSection">
-  <h2>
-    QUESTS
-    <span
-      style="
-        background: #ff6347;
+      .quiz-navigation button,
+      #submitQuizBtn,
+      #backToQuestsBtn {
+        padding: 8px 16px;
+        font-size: 14px;
+        margin: 0 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        background-color: #4a90e2;
         color: white;
-        padding: 4px 10px;
-        border-radius: 50%;
-      "
-      >3</span
-    >
-  </h2>
-
-  <div class="quest-card" onclick="startQuiz('general')">
-    <div class="quest-content">
-      <img src="https://img.icons8.com/emoji/48/star-emoji.png" alt="Star" />
-      <div class="quest-title">Daily Challenge</div>
-    </div>
-    <div class="quest-badge">
-      <img
-        src="https://img.icons8.com/emoji/48/check-mark-emoji.png"
-        alt="Check"
-      />
-    </div>
-  </div>
-
-  <div
-    class="quest-card"
-    onclick="startQuiz('spelling')"
-    style="background-color: #e3f2fd"
-  >
-    <div class="quest-content">
-      <img src="https://img.icons8.com/color/48/abcd.png" alt="Spelling" />
-      <div class="quest-title">Spelling</div>
-    </div>
-    <div class="quest-badge">
-      <img src="https://img.icons8.com/color/48/a.png" alt="Grade A" />
-    </div>
-  </div>
-
-  <div class="quest-card" onclick="startQuiz('animals')">
-    <div class="quest-content">
-      <img src="https://img.icons8.com/color/48/fox.png" alt="Animal" />
-      <div class="quest-title">Animal Quiz</div>
-    </div>
-    <div class="quest-badge">
-      <img src="https://img.icons8.com/color/48/paw.png" alt="Paw" />
-    </div>
-  </div>
-</div>
-
-<!-- Quiz Container -->
-<div id="quizSection" style="display: none"></div>
-
-<!-- Certificate Container -->
-<div id="certificate" style="display: none"></div>
-
-<script>
-  const questsSection = document.getElementById("questsSection");
-  const quizSection = document.getElementById("quizSection");
-  const certificateDiv = document.getElementById("certificate");
-  let stars = Number(localStorage.getItem("stars") || 0);
-  // Replace with your actual API URL
-  const API_URL = "https://kidsappbackend.onrender.com/api/scores";
-
-  // Assume you have user token stored in localStorage after login
-  const token = localStorage.getItem("token");
-
-  // Function to post score to API
-  async function postScore(score) {
-    if (!token) {
-      console.warn("No auth token found. Can't post score.");
-      return;
-    }
-
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ score }),
-      });
-
-      if (!response.ok) {
-        const err = await response.json();
-        console.error(
-          "Failed to post score:",
-          err.message || response.statusText
-        );
-      } else {
-        const data = await response.json();
-        console.log("Score posted successfully:", data);
-      }
-    } catch (error) {
-      console.error("Error posting score:", error);
-    }
-  }
-
-  const quizData = {
-    general: [
-      {
-        question: "How many fingers do you have on one hand?",
-        options: ["4", "5", "6", "7"],
-        answer: "5",
-        image: "https://cdn-icons-png.flaticon.com/512/201/201818.png",
-      },
-      {
-        question: "What is the person doing?",
-        options: ["Running", "Sleeping", "Eating", "Singing"],
-        answer: "Running",
-        image: "https://cdn-icons-png.flaticon.com/512/1404/1404945.png",
-      },
-      {
-        question: "What is the person doing?",
-        options: ["Sleeping", "Dancing", "Swimming", "Reading"],
-        answer: "Sleeping",
-        image: "https://cdn-icons-png.flaticon.com/512/3754/3754548.png",
-      },
-      {
-        question: "What is shown in the image?",
-        options: ["Apple", "Banana", "Orange", "Pear"],
-        answer: "Apple",
-        image: "https://cdn-icons-png.flaticon.com/512/415/415733.png",
-      },
-      {
-        question: "Which shape is this?",
-        options: ["Circle", "Triangle", "Square", "Rectangle"],
-        answer: "Square",
-        image: "https://cdn-icons-png.flaticon.com/512/32/32177.png",
-      },
-      {
-        question: "How many wheels on a bicycle?",
-        options: ["1", "2", "3", "4"],
-        answer: "2",
-        image: "https://cdn-icons-png.flaticon.com/512/743/743922.png",
-      },
-      {
-        question: "What color is a banana?",
-        options: ["Red", "Yellow", "Green", "Blue"],
-        answer: "Yellow",
-        image: "https://cdn-icons-png.flaticon.com/512/415/415733.png",
-      },
-      {
-        question: "What do we use to write?",
-        options: ["Pen", "Fork", "Shoe", "Ball"],
-        answer: "Pen",
-        image: "https://cdn-icons-png.flaticon.com/512/291/291853.png",
-      },
-      {
-        question: "What day comes after Monday?",
-        options: ["Sunday", "Tuesday", "Wednesday", "Friday"],
-        answer: "Tuesday",
-        image: "https://cdn-icons-png.flaticon.com/512/2922/2922551.png",
-      },
-      {
-        question: "Which animal says 'meow'?",
-        options: ["Dog", "Cat", "Cow", "Bird"],
-        answer: "Cat",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-    ],
-    animals: [
-      {
-        question: "What animal is this?",
-        options: ["Dog", "Cat", "Bird", "Elephant"],
-        answer: "Elephant",
-        image: "https://cdn-icons-png.flaticon.com/512/1998/1998618.png",
-      },
-      {
-        question: "Which animal is shown?",
-        options: ["Tiger", "Lion", "Leopard", "Cheetah"],
-        answer: "Tiger",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Which animal is this?",
-        options: ["Monkey", "Bear", "Giraffe", "Elephant"],
-        answer: "Giraffe",
-        image: "https://cdn-icons-png.flaticon.com/512/2962/2962137.png",
-      },
-      {
-        question: "What animal has a long neck?",
-        options: ["Zebra", "Horse", "Giraffe", "Kangaroo"],
-        answer: "Giraffe",
-        image: "https://cdn-icons-png.flaticon.com/512/2962/2962137.png",
-      },
-      {
-        question: "What animal barks?",
-        options: ["Cat", "Dog", "Cow", "Lion"],
-        answer: "Dog",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Which animal lives in water?",
-        options: ["Dolphin", "Lion", "Eagle", "Horse"],
-        answer: "Dolphin",
-        image: "https://cdn-icons-png.flaticon.com/512/2919/2919750.png",
-      },
-      {
-        question: "What animal says 'moo'?",
-        options: ["Sheep", "Cow", "Pig", "Goat"],
-        answer: "Cow",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Which animal can fly?",
-        options: ["Bat", "Penguin", "Elephant", "Dog"],
-        answer: "Bat",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "What animal has stripes?",
-        options: ["Zebra", "Horse", "Elephant", "Lion"],
-        answer: "Zebra",
-        image: "https://cdn-icons-png.flaticon.com/512/1998/1998618.png",
-      },
-      {
-        question: "What animal has a shell?",
-        options: ["Turtle", "Rabbit", "Dog", "Cat"],
-        answer: "Turtle",
-        image: "https://cdn-icons-png.flaticon.com/512/1046/1046769.png",
-      },
-    ],
-    spelling: [
-      {
-        question: "How do you spell the number 10?",
-        options: ["Ten", "Tin", "Tan", "Ton"],
-        answer: "Ten",
-        image: "https://cdn-icons-png.flaticon.com/512/149/149852.png",
-      },
-      {
-        question: "How do you spell 'tree'?",
-        options: ["Tree", "Trea", "Trey", "Teri"],
-        answer: "Tree",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Spell the word 'cat'.",
-        options: ["Kat", "Cat", "Cot", "Cut"],
-        answer: "Cat",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Spell the word 'book'.",
-        options: ["Buk", "Book", "Bok", "Bock"],
-        answer: "Book",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "How do you spell the color red?",
-        options: ["Red", "Rad", "Rid", "Rud"],
-        answer: "Red",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Spell the word 'sun'.",
-        options: ["Son", "Sun", "Sin", "Sunne"],
-        answer: "Sun",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Spell the word 'fish'.",
-        options: ["Fesh", "Fish", "Fush", "Fich"],
-        answer: "Fish",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Spell the word 'milk'.",
-        options: ["Milk", "Mulk", "Milc", "Mick"],
-        answer: "Milk",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Spell the word 'dog'.",
-        options: ["Dog", "Dag", "Dig", "Dug"],
-        answer: "Dog",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-      {
-        question: "Spell the word 'ball'.",
-        options: ["Ball", "Bal", "Boll", "Bawl"],
-        answer: "Ball",
-        image: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-      },
-    ],
-  };
-
-  let currentQuizSet = [];
-  let currentQuizLevel = "";
-  let currentQuizIndex = 0;
-  let userAnswers = {};
-  let score = 0;
-
-  // Capitalize first letter helper
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  // Start Quiz for selected quest
-  function startQuiz(level) {
-    currentQuizLevel = level;
-    currentQuizSet = quizData[level];
-    currentQuizIndex = 0;
-    userAnswers = {};
-    score = 0;
-
-    questsSection.style.display = "none";
-    certificateDiv.style.display = "none";
-    quizSection.style.display = "block";
-
-    renderQuizQuestion();
-
-    // Create Submit Button, disabled initially
-    if (!document.getElementById("submitQuizBtn")) {
-      const submitBtn = document.createElement("button");
-      submitBtn.id = "submitQuizBtn";
-      submitBtn.textContent = "Submit Quiz";
-      submitBtn.disabled = true;
-      submitBtn.onclick = submitQuiz;
-      quizSection.appendChild(submitBtn);
-    } else {
-      document.getElementById("submitQuizBtn").disabled = true;
-    }
-  }
-
-  // Render current question and options
-  function renderQuizQuestion() {
-    const q = currentQuizSet[currentQuizIndex];
-    let optionsHtml = "";
-    for (let option of q.options) {
-      // Add classes if answered to disable buttons & highlight
-      let className = "";
-      if (userAnswers[currentQuizIndex]) {
-        if (option === q.answer) className = "correct";
-        else if (option === userAnswers[currentQuizIndex]) className = "wrong";
+        transition: background-color 0.3s;
       }
 
-      optionsHtml += `<button class="${className}" onclick="selectOption('${option}')" ${
-        userAnswers[currentQuizIndex] ? "disabled" : ""
-      }>${option}</button>`;
-    }
+      .quiz-navigation button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        color: #666;
+      }
 
-    quizSection.innerHTML = `
-          <h2>Level: ${capitalizeFirstLetter(currentQuizLevel)} Quiz</h2>
-          <p><strong>Question ${currentQuizIndex + 1} of ${
-      currentQuizSet.length
-    }</strong></p>
-          <p>${q.question}</p>
-          <img src="${q.image}" alt="Question Image" class="quiz-image" />
-          <div class="quiz-options">${optionsHtml}</div>
+      #submitQuizBtn {
+        margin-top: 20px;
+        background-color: #28a745;
+      }
+      #submitQuizBtn:disabled {
+        background-color: #98d7a5;
+        cursor: not-allowed;
+      }
 
+      .quiz-image {
+        width: 100px;
+        height: auto;
+        margin: 10px 0;
+      }
+
+      /* Certificate styling */
+      #certificate {
+        background: white;
+        border: 5px solid #ff6347;
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 400px;
+        margin: 20px auto;
+        box-shadow: 0 0 20px #ff6347aa;
+      }
+
+      #certificate h2 {
+        color: #ff6347;
+      }
+
+      #certificate p {
+        font-size: 20px;
+        margin: 20px 0;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Quests List Container -->
+    <div id="questsSection">
+      <h2>
+        QUESTS
+        <span
+          style="
+            background: #ff6347;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 50%;
+          "
+          >3</span
+        >
+      </h2>
+
+      <div class="quest-card" onclick="startQuiz('general')">
+        <div class="quest-content">
+          <img
+            src="https://img.icons8.com/emoji/48/star-emoji.png"
+            alt="Star"
+          />
+          <div class="quest-title">Daily Challenge</div>
+        </div>
+        <div class="quest-badge">
+          <img
+            src="https://img.icons8.com/emoji/48/check-mark-emoji.png"
+            alt="Check"
+          />
+        </div>
+      </div>
+
+      <div
+        class="quest-card"
+        onclick="startQuiz('spelling')"
+        style="background-color: #e3f2fd"
+      >
+        <div class="quest-content">
+          <img src="abc.jpg" alt="Spelling" />
+          <div class="quest-title">Spelling</div>
+        </div>
+        <div class="quest-badge">
+          <img src="https://img.icons8.com/color/48/a.png" alt="Grade A" />
+        </div>
+      </div>
+
+      <div class="quest-card" onclick="startQuiz('animals')">
+        <div class="quest-content">
+          <img src="https://img.icons8.com/color/48/fox.png" alt="Animal" />
+          <div class="quest-title">Animal Quiz</div>
+        </div>
+        <div class="quest-badge">
+          <img src="paw.jpg" alt="Paw" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Container -->
+    <div id="quizSection" style="display: none"></div>
+
+    <!-- Certificate Container -->
+    <div id="certificate" style="display: none"></div>
+
+    <script>
+      const questsSection = document.getElementById("questsSection");
+      const quizSection = document.getElementById("quizSection");
+      const certificateDiv = document.getElementById("certificate");
+      let stars = Number(localStorage.getItem("stars") || 0);
+
+      const quizData = {
+        general: [
+          {
+            question: "How many fingers do you have on one hand?",
+            options: ["4", "5", "6", "7"],
+            answer: "5",
+            image: "fingers.jpg",
+          },
+          {
+            question: "What is the person doing?",
+            options: ["Running", "Sleeping", "Eating", "Singing"],
+            answer: "Running",
+            image: "running.jpg",
+          },
+          {
+            question: "What is the person doing?",
+            options: ["Sleeping", "Dancing", "Swimming", "Reading"],
+            answer: "Sleeping",
+            image: "sleeping.jpg",
+          },
+          {
+            question: "What is shown in the image?",
+            options: ["Apple", "Banana", "Orange", "Pear"],
+            answer: "Apple",
+            image: "apple.jpg",
+          },
+          {
+            question: "Which shape is this?",
+            options: ["Circle", "Triangle", "Square", "Rectangle"],
+            answer: "Square",
+            image: "square.jpg",
+          },
+          {
+            question: "How many wheels on a bicycle?",
+            options: ["1", "2", "3", "4"],
+            answer: "2",
+            image: "bicycle.jpg",
+          },
+          {
+            question: "What color is a banana?",
+            options: ["Red", "Yellow", "Green", "Blue"],
+            answer: "Yellow",
+            image: "banana.jpg",
+          },
+          {
+            question: "What do we use to write?",
+            options: ["Pen", "Fork", "Shoe", "Ball"],
+            answer: "Pen",
+            image: "pen.jpg",
+          },
+          {
+            question: "What day comes after Monday?",
+            options: ["Sunday", "Tuesday", "Wednesday", "Friday"],
+            answer: "Tuesday",
+            image: "weeks.jpg",
+          },
+          {
+            question: "Which animal says 'meow'?",
+            options: ["Dog", "Cat", "Cow", "Bird"],
+            answer: "Cat",
+            image: "cat.jpg",
+          },
+        ],
+        animals: [
+          {
+            question: "What animal is this?",
+            options: ["Dog", "Cat", "Bird", "Elephant"],
+            answer: "Elephant",
+            image: "elephant.jpg",
+          },
+          {
+            question: "Which animal is shown?",
+            options: ["Tiger", "Lion", "Leopard", "Cheetah"],
+            answer: "Tiger",
+            image: "tiger.jpg",
+          },
+          {
+            question: "Which animal is this?",
+            options: ["Monkey", "Bear", "Giraffe", "Elephant"],
+            answer: "Giraffe",
+            image: "giraffe.jpg",
+          },
+          {
+            question: "What animal barks?",
+            options: ["Cat", "Dog", "Cow", "Lion"],
+            answer: "Dog",
+            image: "dog.jpg",
+          },
+          {
+            question: "Which animal lives in water?",
+            options: ["Dolphin", "Lion", "Eagle", "Horse"],
+            answer: "Dolphin",
+            image: "dolphin.jpg",
+          },
+          {
+            question: "What animal has a long neck?",
+            options: ["Zebra", "Horse", "Giraffe", "Kangaroo"],
+            answer: "Giraffe",
+            image: "giraffe.jpg",
+          },
+          {
+            question: "What animal says 'moo'?",
+            options: ["Sheep", "Cow", "Pig", "Goat"],
+            answer: "Cow",
+            image: "cow.jpg",
+          },
+          {
+            question: "What animal has stripes?",
+            options: ["Lion", "Tiger", "Bear", "Cat"],
+            answer: "Tiger",
+            image: "tiger.jpg",
+          },
+          {
+            question: "Which animal hops?",
+            options: ["Rabbit", "Horse", "Kangaroo", "Dog"],
+            answer: "Kangaroo",
+            image: "kangaroo.jpg",
+          },
+          {
+            question: "What animal flies?",
+            options: ["Penguin", "Ostrich", "Eagle", "Kangaroo"],
+            answer: "Eagle",
+            image: "eagle.jpg",
+          },
+        ],
+        spelling: [
+          {
+            question: "Spell the word for the baby of a dog.",
+            options: ["Pupy", "Puppy", "Puppie", "Pup"],
+            answer: "Puppy",
+          },
+          {
+            question: "Spell the color of grass.",
+            options: ["Green", "Grene", "Grean", "Grin"],
+            answer: "Green",
+          },
+          {
+            question: "Spell the season after winter.",
+            options: ["Spring", "Sprng", "Sprin", "String"],
+            answer: "Spring",
+          },
+          {
+            question: "Spell the number between three and five.",
+            options: ["Four", "For", "Foor", "Fr"],
+            answer: "Four",
+          },
+          {
+            question: "Spell the day after Monday.",
+            options: ["Tusday", "Tuesay", "Tuesday", "Turday"],
+            answer: "Tuesday",
+          },
+          {
+            question: "Spell the word for a male child.",
+            options: ["Boy", "Boi", "Boiy", "Buy"],
+            answer: "Boy",
+          },
+          {
+            question: "Spell the opposite of night.",
+            options: ["Day", "Daye", "Dey", "Dai"],
+            answer: "Day",
+          },
+          {
+            question: "Spell the fruit that is yellow and curved.",
+            options: ["Banana", "Bananna", "Banenaa", "Bananna"],
+            answer: "Banana",
+          },
+          {
+            question: "Spell what you wear on feet.",
+            options: ["Shoe", "Shoo", "Show", "Sho"],
+            answer: "Shoe",
+          },
+          {
+            question: "Spell the opposite of big.",
+            options: ["Small", "Smoll", "Smal", "Smaal"],
+            answer: "Small",
+          },
+        ],
+      };
+
+      // Globals
+      let currentQuizLevel = null;
+      let currentQuizSet = [];
+      let currentQuizIndex = 0;
+      let score = 0;
+      let userAnswers = {};
+
+      // Helper: shuffle array (Fisher-Yates)
+      function shuffle(array) {
+        let currentIndex = array.length,
+          temporaryValue,
+          randomIndex;
+
+        while (currentIndex !== 0) {
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }
+        return array;
+      }
+
+      // Start quiz for selected quest
+      function startQuiz(level) {
+        currentQuizLevel = level;
+        currentQuizSet = [...quizData[level]];
+        currentQuizIndex = 0;
+        score = 0;
+        userAnswers = {};
+
+        // Hide quests, show quiz container
+        questsSection.style.display = "none";
+        certificateDiv.style.display = "none";
+        quizSection.style.display = "block";
+
+        renderQuizQuestion();
+      }
+
+      // Render current question
+      function renderQuizQuestion() {
+        const quiz = currentQuizSet[currentQuizIndex];
+        if (!quiz) return;
+
+        // Shuffle options each time to avoid pattern
+        const optionsShuffled = shuffle([...quiz.options]);
+
+        // Clear quiz content and build new
+        quizSection.innerHTML = `
+          <h2>Question ${currentQuizIndex + 1} of ${currentQuizSet.length}</h2>
+          <p style="font-size: 20px; font-weight: bold;">${quiz.question}</p>
+          ${
+            quiz.image
+              ? `<img class="quiz-image" src="${quiz.image}" alt="Question Image" />`
+              : ""
+          }
+          <div class="quiz-options" id="optionsContainer">
+            ${optionsShuffled
+              .map(
+                (option, idx) =>
+                  `<button onclick="selectOption('${option}')" id="opt${idx}">${option}</button>`
+              )
+              .join("")}
+          </div>
           <div class="quiz-navigation">
-            <button id="prevBtn" onclick="prevQuestion()" ${
+            <button onclick="prevQuestion()" ${
               currentQuizIndex === 0 ? "disabled" : ""
             }>Previous</button>
-            <button id="nextBtn" onclick="nextQuestion()" ${
+            <button onclick="nextQuestion()" ${
               currentQuizIndex === currentQuizSet.length - 1 ? "disabled" : ""
             }>Next</button>
           </div>
+          ${
+            currentQuizIndex === currentQuizSet.length - 1
+              ? `<button id="submitQuizBtn" onclick="submitQuiz()" disabled>Submit Quiz</button>`
+              : ""
+          }
+          <div style="margin-top:10px; font-weight:bold;">Selected answer: ${
+            userAnswers[currentQuizIndex] || "None"
+          }</div>
         `;
 
-    // Append Submit Button again after render so it stays visible
-    // Append Submit Button again after render so it stays visible
-    let submitBtn = document.getElementById("submitQuizBtn");
-    if (!submitBtn) {
-      submitBtn = document.createElement("button");
-      submitBtn.id = "submitQuizBtn";
-      submitBtn.textContent = "Submit Quiz";
-      quizSection.appendChild(submitBtn);
-    }
-    submitBtn.disabled =
-      Object.keys(userAnswers).length !== currentQuizSet.length;
-    submitBtn.onclick = submitQuiz; // ✅ Always re-attach event listener
-  }
-
-  // Select an option for current question
-  async function selectOption(selectedOption) {
-    const correctAnswer = currentQuizSet[currentQuizIndex].answer;
-    userAnswers[currentQuizIndex] = selectedOption;
-
-    updateScore();
-
-    // ✅ Post score only if the selected option is correct
-    if (selectedOption === correctAnswer) {
-      await postScore(score);
-    }
-
-    renderQuizQuestion();
-
-    // Enable submit button if all questions are answered
-    if (Object.keys(userAnswers).length === currentQuizSet.length) {
-      const submitBtn = document.getElementById("submitQuizBtn");
-      if (submitBtn) submitBtn.disabled = false;
-    }
-  }
-
-  // Update score based on userAnswers
-  function updateScore() {
-    let newScore = 0;
-    for (let i = 0; i < currentQuizSet.length; i++) {
-      if (userAnswers[i] === currentQuizSet[i].answer) {
-        newScore++;
+        // Disable selected option button if answer exists
+        if (userAnswers[currentQuizIndex]) {
+          disableOptions(userAnswers[currentQuizIndex]);
+          // Enable submit if last question answered
+          if (
+            currentQuizIndex === currentQuizSet.length - 1 &&
+            Object.keys(userAnswers).length === currentQuizSet.length
+          ) {
+            document.getElementById("submitQuizBtn").disabled = false;
+          }
+        }
       }
-    }
-    score = newScore;
-  }
 
-  // Post score when navigating questions
-  async function nextQuestion() {
-    if (currentQuizIndex < currentQuizSet.length - 1) {
-      updateScore();
-      await postScore(score);
-      currentQuizIndex++;
-      renderQuizQuestion();
-    }
-  }
+      // Disable all options and highlight selected
+      function disableOptions(selectedOption) {
+        const optionsContainer = document.getElementById("optionsContainer");
+        const buttons = optionsContainer.querySelectorAll("button");
+        buttons.forEach((btn) => {
+          if (btn.textContent === selectedOption) {
+            btn.classList.add("correct");
+          }
+          btn.disabled = true;
+        });
+      }
 
-  async function prevQuestion() {
-    if (currentQuizIndex > 0) {
-      updateScore();
-      await postScore(score);
-      currentQuizIndex--;
-      renderQuizQuestion();
-    }
-  }
+      // Option selection
+      function selectOption(selectedOption) {
+        userAnswers[currentQuizIndex] = selectedOption;
 
-  // Submit quiz and show certificate
-  async function submitQuiz() {
-    updateScore();
-    await postScore(score);
+        // Re-render to disable options and show selected
+        renderQuizQuestion();
 
-    stars += score;
-    localStorage.setItem("stars", stars);
+        // Check if last question is answered to enable submit
+        if (
+          currentQuizIndex === currentQuizSet.length - 1 &&
+          Object.keys(userAnswers).length === currentQuizSet.length
+        ) {
+          document.getElementById("submitQuizBtn").disabled = false;
+        }
+      }
 
-    quizSection.style.display = "none";
-    certificateDiv.style.display = "block";
+      // Next question
+      function nextQuestion() {
+        if (currentQuizIndex < currentQuizSet.length - 1) {
+          currentQuizIndex++;
+          renderQuizQuestion();
+        }
+      }
 
-    certificateDiv.innerHTML = `
+      // Previous question
+      function prevQuestion() {
+        if (currentQuizIndex > 0) {
+          currentQuizIndex--;
+          renderQuizQuestion();
+        }
+      }
+
+      // Submit quiz and show certificate
+      function submitQuiz() {
+        // Calculate score
+        score = 0;
+        for (let i = 0; i < currentQuizSet.length; i++) {
+          if (userAnswers[i] === currentQuizSet[i].answer) {
+            score++;
+          }
+        }
+
+        // Update stars in localStorage
+        stars += score;
+        localStorage.setItem("stars", stars);
+
+        // Hide quiz, show certificate
+        quizSection.style.display = "none";
+        certificateDiv.style.display = "block";
+
+        certificateDiv.innerHTML = `
           <h2>🎉 Certificate of Completion 🎉</h2>
           <p>You completed the <strong>${capitalizeFirstLetter(
             currentQuizLevel
           )} Quiz</strong></p>
           <p>Your score: <strong>${score} / ${
-      currentQuizSet.length
-    }</strong></p>
+          currentQuizSet.length
+        }</strong></p>
           <p>Total stars earned: <strong>${stars}</strong></p>
           <button id="backToQuestsBtn" onclick="backToQuests()">Back to Quests</button>
         `;
-  }
+      }
 
-  // Go back to quests list
-  function backToQuests() {
-    certificateDiv.style.display = "none";
-    quizSection.style.display = "none";
-    questsSection.style.display = "block";
-  }
-</script>
+      // Go back to quests
+      function backToQuests() {
+        certificateDiv.style.display = "none";
+        questsSection.style.display = "block";
+      }
+
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+    </script>
+  </body>
+</html>

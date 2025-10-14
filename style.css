@@ -126,6 +126,13 @@ header .user-info {
   margin-bottom: 2rem;
   flex-wrap: wrap;
 }
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
 
 .avatar-thumb {
   width: 60px;
